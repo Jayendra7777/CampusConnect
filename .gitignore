@@ -1,0 +1,14 @@
+# Java build output
+*.class
+build/
+out/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Local credentials and configuration
+.env
+*.local.properties
+uploads/
