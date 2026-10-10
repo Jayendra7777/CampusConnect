@@ -41,6 +41,7 @@ CampusConnect is a Java Swing desktop application designed to help a campus comm
 ## Project structure
 
 ```text
+```text
 CampusConnect/
 ├── LoginFrame.java
 ├── RegisterDialog.java
