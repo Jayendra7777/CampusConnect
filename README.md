@@ -140,6 +140,7 @@ The Report Lost Item and Report Found Item forms accept optional JPG, JPEG, PNG,
 
 ## Contributors
 
+- **Jayendra Chand** — Project Developer.
 - **Rudra Pratap** — PowerPoint presentation (PPT).
 - **Karan Pareek** — Project assistance and support.
 
