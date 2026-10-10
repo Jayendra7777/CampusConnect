@@ -1,0 +1,10 @@
+CampusConnect admin login
+
+Admin email: admin123@gmail.com
+Admin password: admin123
+
+Select Admin on the login screen and enter these credentials. Student registration does not create or modify admin accounts.
+
+Security note: these are fixed demo credentials stored in LoginFrame.java. Anyone who can read the source code can see them. Keep this project private or change the credentials before publishing it publicly or using it beyond a classroom demo.
+
+Student accounts are created from the Create a student account button and saved in the CampusConnectDB Users table. Student passwords are stored as salted PBKDF2 hashes, not plain text. Students must use the same email/contact number and password on future sign-ins.

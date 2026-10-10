@@ -14,4 +14,9 @@ public class User {
         System.out.println("Name: " + name);
         System.out.println("Email: " + email);
     }
+
+    // Method that can be overridden by child classes
+    void displayRole() {
+        System.out.println("Role: User");
+    }
 }

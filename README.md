@@ -1,134 +1,151 @@
 # CampusConnect
 
-## Campus Lost and Found Management System
+**Campus Lost and Found Management System**
 
-CampusConnect is a Java-based console application designed to
-demonstrate a simple campus lost and found management workflow.
-
-The system allows students to report lost or found items, search for
-items, submit claims, and provide reporter contact information. An
-administrator can review claims, approve or reject them, and update an
-item's status when it is returned.
+CampusConnect is a Java Swing desktop application designed to help a campus community report, discover, and recover lost belongings. It uses MySQL for persistent storage and JDBC for database operations, with separate workflows for students and administrators.
 
 ## Features
 
-### Student Portal
+### Student portal
+- Create a student account and sign in using an email address or contact number.
+- Store student accounts in the MySQL `Users` table.
+- Store student passwords as salted PBKDF2 hashes.
+- Report lost items with a name, description, location, date, reporter name, and contact number.
+- Report found items with the same details.
+- Optionally attach an item photo (JPG, JPEG, PNG, or GIF).
+- Search item names using partial, case-insensitive matches.
+- Submit claims for items.
 
--   Report a lost item
--   Report a found item
--   Search items by partial item name
--   Submit a claim for an available item
--   Store reporter name and contact number
--   Prevent duplicate item IDs
--   Prevent duplicate active claims for the same item
+### Admin portal
+- View reported lost items, found items, and submitted claims.
+- Approve or reject pending claims.
+- Mark items as returned.
 
-### Admin Portal
+### Java and database concepts demonstrated
+- Object-oriented programming with classes, objects, inheritance, and method overriding.
+- Interfaces for searchable and claimable behavior.
+- Exception handling and input/database error handling.
+- Collections and generic collection types such as `ArrayList<T>`.
+- A synchronized claim-processing example demonstrating threads and synchronization.
+- JDBC database connectivity and DAO classes using prepared statements.
+- Java Swing forms, dashboards, tables, and a shared visual theme.
 
--   Admin login
--   View lost items
--   View found items
--   View submitted claims
--   Approve or reject claims
--   Mark claimed items as returned
+## Technology stack
 
-### Validation and Exception Handling
+- **Language:** Java
+- **GUI:** Java Swing
+- **Database:** MySQL
+- **Database access:** JDBC / MySQL Connector/J
+- **Password hashing:** PBKDF2 with HMAC-SHA256
 
--   Handles invalid numeric input using `try-catch`
--   Prevents duplicate Item IDs
--   Prevents duplicate Claim IDs
--   Prevents claims for unavailable items
--   Prevents multiple active claims for the same item
--   Displays a clear message when no claims are available
+## Project structure
 
-## Project Structure
-
-``` text
+```text
 CampusConnect/
-│
-├── Main.java
-├── User.java
-├── Student.java
-├── Admin.java
-├── LostItem.java
-├── FoundItem.java
-├── Claim.java
+├── LoginFrame.java
+├── RegisterDialog.java
+├── StudentDashboard.java
+├── AdminDashboard.java
+├── ReportLostItemFrame.java
+├── ReportFoundItemFrame.java
+├── SearchItemFrame.java
+├── ClaimFrame.java
+├── ViewLostItemsFrame.java
+├── ViewFoundItemsFrame.java
+├── ViewClaimsFrame.java
+├── ApproveRejectClaimFrame.java
+├── MarkReturnedFrame.java
+├── User.java / Student.java / Admin.java
+├── LostItem.java / FoundItem.java / Claim.java
+├── Searchable.java / Claimable.java
+├── DatabaseConnection.java
+├── UserDAO.java / LostItemDAO.java / FoundItemDAO.java / ClaimDAO.java
+├── ClaimService.java
+├── AppStyle.java
+├── database/
+│   └── campusconnect.sql
+├── lib/
+│   └── mysql-connector-j-26.7.0.jar
+├── uploads/                 # Created when item photos are uploaded
+├── ADMIN_SETUP.txt
 └── README.md
 ```
 
-## Java Concepts Used
+## Requirements
 
--   Object-Oriented Programming
--   Classes and Objects
--   Inheritance
--   Constructors
--   ArrayList
--   Loops and Conditional Statements
--   String handling
--   Exception Handling using `try-catch`
--   Basic input validation
+- JDK 11 or later (the project has been configured/tested with a newer JDK as well).
+- MySQL Server.
+- MySQL Connector/J, included in `lib/`.
 
-## Item Status Flow
+## Database setup
 
-``` text
-Available
-    ↓
-Claim Submitted
-    ↓
-Pending
-    ↓
-Admin Approval
-    ↓
-Claimed
-    ↓
-Returned
+1. Start your local MySQL Server.
+2. Open `database/campusconnect.sql` in MySQL Workbench and execute it. The script creates `CampusConnectDB` and the required tables if they do not already exist.
+3. Configure your own MySQL account credentials in Windows PowerShell. Replace the example password with your own; do not commit credentials to source control.
+
+   ```powershell
+   setx CAMPUSCONNECT_DB_USER "root"
+   setx CAMPUSCONNECT_DB_PASSWORD "YOUR_MYSQL_PASSWORD"
+   ```
+
+4. Close and reopen VS Code so it receives the new environment variables.
+5. The default JDBC URL is `jdbc:mysql://localhost:3307/CampusConnectDB`. If your MySQL Server uses a different port, update the URL in `DatabaseConnection.java`.
+6. Keep the MySQL Server running while using CampusConnect.
+
+The SQL script uses `CREATE TABLE IF NOT EXISTS`; it does not delete existing records. The item DAO also supports adding the `photo_path` column to existing item tables when needed.
+
+## Compile and run
+
+Open a terminal in the `CampusConnect` project directory.
+
+### Windows PowerShell
+
+```powershell
+New-Item -ItemType Directory -Force build
+javac -encoding UTF-8 -cp "lib/mysql-connector-j-26.7.0.jar" -d build *.java
+java -cp "build;lib/mysql-connector-j-26.7.0.jar" LoginFrame
 ```
 
-A claim can also be rejected by the administrator.
+### macOS / Linux
 
-## How to Run
+Use `:` instead of `;` in the Java classpath:
 
-### Requirements
-
--   Java JDK installed
--   VS Code, IntelliJ IDEA, Eclipse, or any Java-compatible IDE
-
-### Compile
-
-Open a terminal in the project folder and run:
-
-``` bash
-javac *.java
+```bash
+mkdir -p build
+javac -encoding UTF-8 -cp "lib/mysql-connector-j-26.7.0.jar" -d build *.java
+java -cp "build:lib/mysql-connector-j-26.7.0.jar" LoginFrame
 ```
 
-### Run
+## Demo administrator login
 
-``` bash
-java Main
-```
+Select **Admin** on the login screen and use the classroom-demo credentials below:
 
-## Demo Flow
+- **Email:** `admin123@gmail.com`
+- **Password:** `admin123`
 
-A typical demonstration can follow this sequence:
+These demo credentials are currently hardcoded in `LoginFrame.java` and are visible to anyone who can read the source. Change them before publishing the repository publicly or using the application beyond a classroom demonstration. Student registration does not create administrator accounts.
 
-1.  Open the Student Portal.
-2.  Enter the student's name.
-3.  Report a lost or found item.
-4.  Enter reporter name and contact number.
-5.  Search for an item using part of its name.
-6.  Submit a claim.
-7.  Return to the main menu.
-8.  Login as Admin.
-9.  View the reported items and claims.
-10. Approve or reject a claim.
-11. Mark an approved/claimed item as returned.
+## Item photos
 
-## Project Scope
+The Report Lost Item and Report Found Item forms accept optional JPG, JPEG, PNG, or GIF images. Selected images are copied into the project's `uploads/` folder, and their relative paths are stored in the relevant item table's `photo_path` column. Keep the `uploads/` folder with the project when moving it to another computer if you want to retain uploaded images.
 
-CampusConnect is developed as a demonstration/prototype model. It uses
-in-memory `ArrayList` collections rather than a database or permanent
-account storage. The focus is on demonstrating the core Java programming
-and OOP concepts required for a campus lost and found workflow.
+## Limitations
+
+- This is a classroom project/prototype, not a production-ready campus service.
+- Administrator credentials are hardcoded for demonstration purposes.
+- Database availability is required for registration, login, and database-backed item/claim operations.
+- The synchronized `ClaimService` demonstrates thread synchronization; it should not be interpreted as a complete production-grade concurrency or duplicate-claim prevention system.
+- Uploaded image files are stored locally in the project directory rather than in cloud storage.
+
+## Contributors
+
+- **Rudra Pratap** — PowerPoint presentation (PPT).
+- **Karan Pareek** — Project assistance and support.
 
 ## Author
 
-CampusConnect Java Project
+**Jayendra Chand**
+
+## License
+
+No license has been specified for this project. Contact the project author before reusing or redistributing it.

@@ -1,4 +1,4 @@
-public class FoundItem {
+public class FoundItem implements Searchable {
 
     int itemId;
     String itemName;
@@ -33,5 +33,20 @@ public class FoundItem {
         System.out.println("Reported By: " + reporterName);
         System.out.println("Contact Number: " + contactNumber);
         System.out.println("Status: " + status);
+    }
+
+    @Override
+    public void searchItem(String itemName) {
+
+        if (this.itemName != null &&
+            this.itemName.toLowerCase().contains(itemName.toLowerCase())) {
+
+            System.out.println("\n===== ITEM FOUND =====");
+            displayFoundItem();
+
+        } else {
+
+            System.out.println("Item not found.");
+        }
     }
 }

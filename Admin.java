@@ -7,8 +7,14 @@ public class Admin extends User {
         this.adminId = adminId;
     }
 
+    @Override
+    void displayRole() {
+        System.out.println("Role: Admin");
+    }
+
     void displayAdmin() {
         displayUser();
+        displayRole();
         System.out.println("Admin ID: " + adminId);
     }
 }
